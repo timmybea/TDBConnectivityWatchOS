@@ -91,9 +91,13 @@ extension WatchConnectivityService : WCSessionDelegate {
     // Called when a message is received and the peer doesn't need a response.
     public func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
         
+        let identifier = message[UserInfoKey.identifier] ?? "received"
+        let payload = message[UserInfoKey.payload] ?? [:]
+        
         let userInfo: [String : Any] = [UserInfoKey.channel: Channel.sendMessage.rawValue,
                                         UserInfoKey.phrase: Phrase.received.rawValue,
-                                        UserInfoKey.payload: message]
+                                        UserInfoKey.identifier: identifier,
+                                        UserInfoKey.payload: payload]
         
         postNotificationOnMainQueue(name: .dataDidFlow, userInfo: userInfo)
     }
